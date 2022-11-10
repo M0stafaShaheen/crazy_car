@@ -34,7 +34,6 @@ int main()
     int x2 = 0;
     int x3 = 0 ;
     int countcoin = 0 ;
-
     // font
     sf::Font font;
     font.loadFromFile("data/arial.ttf") ;
@@ -196,6 +195,7 @@ int main()
     texture10.loadFromFile("data/barrier.png");
     sf::Sprite photo10(texture10);
     photo10.scale(sf::Vector2f(0.2,0.2));
+    //photo5.setPosition(400,100);
     photo10.setPosition(0,0) ;
 
 
@@ -228,20 +228,10 @@ int main()
             {
                 f2 = true ;
             }
-
             if((event.type == sf::Event::KeyPressed)&&(event.key.code == sf::Keyboard::F1))
             {
                 f1 = true ;
             }
-            if(photo4.getGlobalBounds().intersects(photo5.getGlobalBounds())==true ) // car2 --> block
-            {
-                crashblock = true ;
-            }
-            if(photo4.getGlobalBounds().intersects(photo10.getGlobalBounds())==true )
-            {
-                crashblock = true  ;
-            }
-
         }
 
         // ------------------
@@ -344,16 +334,13 @@ int main()
         }
 
         // -----------------------
-        if(photo5.getGlobalBounds().intersects(photo4.getGlobalBounds())==true ) // car2 --> block
-        {
+        /*if((photo4.getGlobalBounds().intersects(photo5.getGlobalBounds())==true) || (photo4.getGlobalBounds().intersects(photo10.getGlobalBounds())==true))
+            {
             crashblock = true ;
-        }
-        if(photo10.getGlobalBounds().intersects(photo4.getGlobalBounds())==true )
-        {
-            crashblock = true ;
-        }
+            }
 
-        if(photo9.getGlobalBounds().intersects(photo4.getGlobalBounds()) == true)
+            */
+        if(photo4.getGlobalBounds().intersects(photo9.getGlobalBounds())==true)
         {
             countcoin++;
             photo9.setPosition(900,900) ;
@@ -367,8 +354,7 @@ int main()
 
         // rendering
 
-
-        if((space == false)&&(enter == false))
+        if((space == false)&&(enter == false)&&(crashblock == false))
         {
             window.clear();
             window.draw(text1);
@@ -376,8 +362,7 @@ int main()
             window.display() ;
         }
 
-
-        if((space == true ))
+        if((space == true )&&(enter == false))
         {
             window.clear();
             window.draw(photo2) ;
@@ -388,24 +373,32 @@ int main()
             window.draw(text4);
             window.display();
         }
-
-        if(enter == true)
+        if((enter == true))
         {
             space = false ;
             window.clear() ;
-            window.draw(photo7);
-            window.draw(photo8) ;
-            window.draw(photo3);
-            window.draw(photo6) ;
-            window.draw(photo4) ;
-            window.draw(photo5);
-            window.draw(photo10) ;
-            window.draw(photo9) ;
-            window.draw(text8) ;
-            window.draw(text9) ;
-            window.display() ;
+            if((photo4.getGlobalBounds().intersects(photo5.getGlobalBounds())==true) || (photo4.getGlobalBounds().intersects(photo10.getGlobalBounds())==true))
+            {
+                crashblock = true ;
+                enter=false;
+            }
+            if(crashblock == false)
+            {
+                window.draw(photo7);
+                window.draw(photo8) ;
+                window.draw(photo3);
+                window.draw(photo6) ;
+                window.draw(photo4) ;
+                window.draw(photo5);
+                window.draw(photo10) ;
+                window.draw(photo9) ;
+                window.draw(text8) ;
+                window.draw(text9) ;
+                window.display() ;
+            }
         }
-        if(crashblock == true &&enter == false )
+
+        if((crashblock == true))
         {
             countcoin = 0 ;
             enter = false ;
@@ -416,13 +409,12 @@ int main()
             window.draw(text7) ;
             window.display() ;
         }
-        if(f2 == true )
+        if((f2 == true))
         {
             crashblock = false ;
             enter = true ;
             f2 = false ;
         }
-
     }
     return 0;
 }
